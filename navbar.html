@@ -1,0 +1,163 @@
+<!-- Navbar -->
+<nav class="absolute top-0 left-0 w-full bg-transparent text-white z-10 px-10">
+    <div class="max-w-[1300px] mx-auto flex justify-between items-center px-6 py-4">
+        <a href="#" class="flex items-center">
+            <img src="img/logo.png" alt="Pixabay Logo" class="w-52 h-24 invert">
+        </a>
+        <div class="flex space-x-6 items-center">
+            <div class="relative">
+                <button id="exploreBtn" class="text-white hover:text-gray-300 px-4 py-2 bg-opacity-50 bg-gray-800 rounded">Explore</button>
+                <div id="exploreMenu" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white p-8 shadow-lg w-[900px] max-w-full rounded-lg">
+                    <div class="grid grid-cols-5 gap-6">
+                        <div>
+                            <h3 class="font-bold mb-2">Media</h3>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Photos</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Illustrations</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Vectors</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Videos</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Music</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Sound Effects</a>
+                            <a href="#" class="block hover:text-gray-300">GIFs</a>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2">Discover</h3>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Editor's Choice</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Curated Collections</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Pixabay Radio</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Popular Images</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Popular Videos</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Popular Music</a>
+                            <a href="#" class="block hover:text-gray-300">Popular Searches</a>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2">Trending</h3>
+                            <a href="#" class="block hover:text-gray-300 mb-1">International Women's Day</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Rio Carnival</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Holi</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">St Patrick's Day</a>
+                            <a href="#" class="block hover:text-gray-300">Ramadan</a>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2">Community</h3>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Creators</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Forum</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Blog</a>
+                            <a href="#" class="block hover:text-gray-300">Cameras</a>
+                        </div>
+                        <div>
+                            <h3 class="font-bold mb-2">About</h3>
+                            <a href="#" class="block hover:text-gray-300 mb-1">About Us</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">FAQ</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">License Summary</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Terms of Service</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Privacy Policy</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Cookies Policy</a>
+                            <a href="#" class="block hover:text-gray-300 mb-1">Report Content</a>
+                            <a href="#" class="block hover:text-gray-300">API</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Log in Dropdown -->
+            <div class="relative">
+                <button id="loginBtn" class="text-white hover:text-gray-300 px-4 py-2 bg-opacity-50 bg-gray-800 rounded">Log in</button>
+                <div id="loginMenu" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white text-black p-8 shadow-2xl rounded-lg w-[600px] min-h-[500px] max-w-full">
+                    <!-- Header -->
+                    <div class="text-center font-bold text-lg pb-4 border-b border-gray-300">
+                        Sign up to download unlimited full resolution media
+                    </div>
+            
+                    <!-- Tab Navigation -->
+                    <div class="flex justify-center space-x-6 border-b border-gray-300 pb-2 mt-4">
+                        <button class="tab-btn text-gray-500 font-semibold hover:text-black">Sign up</button>
+                        <button class="tab-btn text-green-600 font-semibold border-b-2 border-green-600">Log in</button>
+                    </div>
+            
+                    <!-- Social Login -->
+                    <div class="mt-4">
+                        <button class="w-full flex items-center justify-center bg-white border border-gray-300 text-black px-4 py-3 rounded mb-3">
+                            <img src="img/google.png" class="w-5 h-5 mr-2"> Continue with Google
+                        </button>
+                        <button class="w-full flex items-center justify-center bg-white border border-gray-300 text-black px-4 py-3 rounded mb-3">
+                            <img src="img/facebook.png" class="w-5 h-5 mr-2"> Continue with Facebook
+                        </button>
+                    </div>
+            
+                    <!-- OR Divider -->
+                    <div class="text-center text-gray-400 uppercase text-sm my-4">or</div>
+            
+                    <!-- Login Form -->
+                    <div>
+                        <label class="block text-gray-700 text-sm mb-1">Username or email</label>
+                        <input type="text" class="w-full p-3 rounded border border-gray-300 bg-gray-100 text-black mb-3" placeholder="example@gmail.com">
+                        
+                        <label class="block text-gray-700 text-sm mb-1">Password</label>
+                        <input type="password" class="w-full p-3 rounded border border-gray-300 bg-gray-100 text-black mb-3" placeholder="Password">
+                        
+                        <button class="w-full bg-green-500 text-white px-4 py-3 rounded font-semibold">Log in</button>
+                    </div>
+            
+                    <!-- Forgot Password -->
+                    <div class="text-center mt-3">
+                        <a href="#" class="text-green-600 text-sm hover:underline">Forgot password?</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!--Join dropdown-->
+            <div class="relative">
+                <button id="joinBtn" class="text-white hover:text-gray-300 px-4 py-2 bg-opacity-50 bg-gray-800 rounded">Join</button>
+                <div id="joinMenu" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white text-black p-8 shadow-lg rounded-lg w-[600px] min-h-[500px] max-w-full">
+                    <h2 class="text-center font-bold text-lg mb-4">Sign up to download unlimited full-resolution media</h2>
+                    
+                    <div class="flex justify-center mb-4">
+                        <button id="signUpTab" class="text-black font-semibold border-b-2 border-green-500 px-4 py-2">Sign up</button>
+                        <button id="logInTab" class="text-gray-500 px-4 py-2">Log in</button>
+                    </div>
+            
+                    <button class="w-full flex items-center justify-center border px-4 py-2 rounded-lg mb-2">
+                        <img src="img/google.png" class="w-5 h-5 mr-2" alt="Google"> Sign up with Google
+                    </button>
+                    <button class="w-full flex items-center justify-center border px-4 py-2 rounded-lg mb-2">
+                        <img src="img/facebook.png" class="w-5 h-5 mr-2" alt="Facebook"> Continue with Facebook
+                    </button>
+            
+                    <div class="text-center text-gray-500 my-2">or</div>
+            
+                    <input type="text" class="w-full p-2 rounded border border-gray-300 mb-2" placeholder="Username">
+                    <input type="email" class="w-full p-2 rounded border border-gray-300 mb-2" placeholder="Email">
+                    <input type="password" class="w-full p-2 rounded border border-gray-300 mb-4" placeholder="Password">
+            
+                    <button class="w-full bg-green-500 text-white px-4 py-2 rounded-lg">Join</button>
+                </div>
+            </div>
+                            
+            <!-- Upload Button -->
+            <div class="relative">
+                <button id="uploadBtn" class="bg-green-500 text-white px-4 py-2 rounded-md">Upload</button>
+
+                <div id="uploadMenu" class="hidden fixed top-20 left-1/2 transform -translate-x-1/2 bg-white text-black p-8 shadow-lg rounded-lg w-[600px] min-h-[500px] max-w-full">
+                    <h2 class="text-center font-bold text-lg mb-4">Sign up to download unlimited full-resolution media</h2>
+                    
+                    <div class="flex justify-center mb-4">
+                        <button id="signUpTab" class="text-black font-semibold border-b-2 border-green-500 px-4 py-2">Sign up</button>
+                        <button id="logInTab" class="text-gray-500 px-4 py-2">Log in</button>
+                    </div>
+            
+                    <button class="w-full flex items-center justify-center border px-4 py-2 rounded-lg mb-2">
+                        <img src="img/google.png" class="w-5 h-5 mr-2" alt="Google"> Sign up with Google
+                    </button>
+                    <button class="w-full flex items-center justify-center border px-4 py-2 rounded-lg mb-2">
+                        <img src="img/facebook.png" class="w-5 h-5 mr-2" alt="Facebook"> Continue with Facebook
+                    </button>
+            
+                    <div class="text-center text-gray-500 my-2">or</div>
+            
+                    <input type="text" class="w-full p-2 rounded border border-gray-300 mb-2" placeholder="Username">
+                    <input type="email" class="w-full p-2 rounded border border-gray-300 mb-2" placeholder="Email">
+                    <input type="password" class="w-full p-2 rounded border border-gray-300 mb-4" placeholder="Password">
+            
+                    <button type="submit" class="bg-green-500 text-white w-full py-2 mt-4 rounded-md">Join</button>
+                </div>
+            </div>
+</nav>

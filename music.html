@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/wavesurfer.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .music-list {
+            width: 80%;
+            margin: auto;
+        }
+        .playlist-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .playlist {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .music-info {
+            flex-grow: 1;
+        }
+        .waveform-container {
+            width: 200px;
+            height: 50px;
+        }
+        .song-duration, .song-genre, .download-icon {
+            margin-left: 10px;
+        }
+    </style>
+
+    <style>
+        /* Hide scrollbar but keep scrolling functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .scroll-container:hover .scroll-btn {
+            display: block;
+        }
+        #scrollContainer::-webkit-scrollbar {
+            display: none;
+        }
+        #scrollContainer {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        img {
+            width: 100px; /* Adjust based on card size */
+            height: 150px;
+            object-fit: cover; /* Ensures the image fills the space without distortion */
+        }
+        .profile-img {
+            width: 100px;  /* Adjust as needed */
+            height: 100px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover; /* Ensures proper fit */
+        }
+        .scrollbar-hide {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE & Edge */
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        .nav-link.active {
+            background-color: white;
+            color: black;
+            padding: 10px 16px;
+            border-radius: 20px;
+        }
+        [id^="waveform-"] {
+            overflow: hidden;
+            max-width: 100%;
+            position: relative;
+            z-index: 10;
+        }
+        .blur-effect {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 112px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7), transparent);
+            backdrop-filter: blur(12px);
+            z-index: 20;
+            pointer-events: none; /* Prevents interference */
+        }
+
+                
+    </style>
+</head>
+<body class="bg-gray-100">
+    
+    <!-- Hero Section -->
+    <div class="relative w-full h-[500px] bg-cover bg-center" style="background-image: url('img/vinyl.jpg');">
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center">
+
+            <!-- Heading at the Top -->
+            <h1 class="text-2xl md:text-4xl font-bold mb-10">Royalty free music downloads</h1>
+
+
+            <div class="flex flex-wrap justify-center items-center gap-4 w-full max-w-[900px] mx-auto">
+                <a href="home.html" class="nav-link font-semibold whitespace-nowrap">Explore</a>
+
+                <a href="photos.html" class="nav-link font-semibold whitespace-nowrap">Photos</a>
+
+                <a href="illustrations.html" class="nav-link font-semibold whitespace-nowrap">Illustrations</a>
+            
+                <a href="vectors.html" class="nav-link font-semibold whitespace-nowrap">Vectors</a>
+            
+                <a href="videos.html" class="nav-link font-semibold whitespace-nowrap">Videos</a>
+            
+                <a href="music.html" class="nav-link font-semibold px-4 py-2 rounded-full whitespace-nowrap
+                    text-black bg-white">Music</a>
+            
+                <a href="sound-effects.html" class="nav-link font-semibold whitespace-nowrap">Sound Effects</a>
+            
+                <a href="gifs.html" class="nav-link font-semibold whitespace-nowrap ">GIFs</a>
+            </div>
+            
+            
+            <div class="mt-2 relative w-full max-w-2xl">
+                <div class="flex items-center bg-gray-300 px-4 py-3 rounded-full">
+                    <!-- Search Icon -->
+                    <svg class="w-6 h-6 text-gray-600 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 4a6 6 0 106 6 6 6 0 00-6-6zm8.707 15.293a1 1 0 01-1.414 0l-4.243-4.243a8 8 0 111.414-1.414l4.243 4.243a1 1 0 010 1.414z"/>
+                    </svg>
+                    <input type="text" placeholder="Search..." class="ml-2 w-full bg-transparent focus:outline-none text-gray-800">
+                </div>
+            </div>
+            
+                                   
+            <!-- Categories with Scrollable Navigation -->
+            <div class="relative w-full max-w-2xl mx-auto mt-2 px-4">
+                <div class="flex items-center justify-between">
+                    <button id="scrollLeft" class="scroll-btn left-0 hidden">&#60;</button>
+                    <div id="categoryContainer" class="flex gap-2 overflow-x-auto hide-scrollbar whitespace-nowrap px-2 py-2">
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Business</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Wallpaper</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Cat</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Dog</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Ramadan</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Sky</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Nature</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">International Women's Day</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Holi</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Technology</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Office</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Travel</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Food</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Fashion</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Art</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">People</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Animals</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Sports</span>
+                    </div>
+                    <button id="scrollRight" class="scroll-btn right-0">&#62;</button>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-2 w-full flex justify-between text-white text-sm px-4">
+            <span>Free image by <a href="#" class="underline">Totoosart</a></span>
+            <span><a href="#" class="underline">Read more about the Content License</a></span>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryContainer = document.getElementById("categoryContainer");
+            const scrollLeft = document.getElementById("scrollLeft");
+            const scrollRight = document.getElementById("scrollRight");
+            const discoverBtn = document.getElementById("discoverMore");
+            const nextBtn = document.getElementById("next");
+
+        // Smooth scrolling on wheel event
+        categoryContainer.addEventListener("wheel", function (event) {
+            event.preventDefault();
+            this.scrollBy({ left: event.deltaY < 0 ? -200 : 200, behavior: 'smooth' });
+        });
+
+        scrollLeft.addEventListener("click", function () {
+            categoryContainer.scrollBy({ left: -200, behavior: 'smooth' });
+            scrollRight.classList.remove("hidden");
+            scrollLeft.classList.add("hidden");
+        });
+
+        scrollRight.addEventListener("click", function () {
+            categoryContainer.scrollBy({ left: 200, behavior: 'smooth' });
+            scrollLeft.classList.remove("hidden");
+            scrollRight.classList.add("hidden");
+        });
+
+        // Show discover button after scrolling 500px
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 500) {
+                discoverBtn.classList.remove("opacity-0", "invisible");
+                discoverBtn.classList.add("opacity-100");
+            } else {
+                discoverBtn.classList.remove("opacity-100");
+                discoverBtn.classList.add("opacity-0", "invisible");
+            }
+        });
+
+        // Smooth scroll when clicking Discover More button
+        discoverBtn.addEventListener("click", function () {
+            window.scrollBy({ top: 500, behavior: "smooth" });
+        });
+    });    
+    </script>
+    <div id="navbar-container"></div>
+    <script>
+        // Load Navbar
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("navbar-container").innerHTML = data;
+                loadDropdownScript(); // Initialize dropdowns after navbar loads
+            });
+    
+        // Dropdown menu handling script
+        function loadDropdownScript() {
+            const dropdownButtons = [
+                { button: "exploreBtn", menu: "exploreMenu" },
+                { button: "loginBtn", menu: "loginMenu" },
+                { button: "joinBtn", menu: "joinMenu" },
+                { button: "uploadBtn", menu: "uploadMenu" }
+            ];
+    
+            function disableScroll() {
+                document.body.style.overflow = "hidden";
+            }
+    
+            function enableScroll() {
+                document.body.style.overflow = "auto";
+            }
+    
+            function closeAllMenus() {
+                dropdownButtons.forEach(({ menu }) => {
+                    let dropdown = document.getElementById(menu);
+                    if (dropdown && !dropdown.classList.contains("hidden")) {
+                        dropdown.classList.add("hidden");
+                    }
+                });
+    
+                let anyMenuOpen = dropdownButtons.some(({ menu }) =>
+                    document.getElementById(menu) && !document.getElementById(menu).classList.contains("hidden")
+                );
+                if (!anyMenuOpen) {
+                    enableScroll();
+                }
+            }
+    
+            dropdownButtons.forEach(({ button, menu }) => {
+                const btn = document.getElementById(button);
+                const dropdownMenu = document.getElementById(menu);
+    
+                if (btn && dropdownMenu) {
+                    btn.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        const isHidden = dropdownMenu.classList.contains("hidden");
+                        closeAllMenus();
+                        if (isHidden) {
+                            dropdownMenu.classList.remove("hidden");
+                            disableScroll();
+                        }
+                    });
+                }
+            });
+    
+            document.addEventListener("click", function (event) {
+                const isClickInsideMenu = dropdownButtons.some(({ menu }) =>
+                    document.getElementById(menu) && document.getElementById(menu).contains(event.target)
+                );
+                if (!isClickInsideMenu) {
+                    closeAllMenus();
+                }
+            });
+        }
+
+    </script>
+    <script>   
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const scrollContainer = document.getElementById("scrollContainer");
+        const prevButton = document.getElementById("prev");
+        const nextButton = document.getElementById("next");
+
+        // Function to scroll right (next button)
+        nextButton.addEventListener("click", function () {
+            scrollContainer.scrollBy({ left: 300, behavior: "smooth" });
+            updateButtons();
+        });
+
+        // Function to scroll left (prev button)
+        prevButton.addEventListener("click", function () {
+            scrollContainer.scrollBy({ left: -300, behavior: "smooth" });
+            updateButtons();
+        });
+
+        // Show/hide buttons based on scroll position
+        function updateButtons() {
+            setTimeout(() => {
+                prevButton.classList.toggle("hidden", scrollContainer.scrollLeft <= 0);
+                nextButton.classList.toggle("hidden", scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth);
+            }, 200);
+        }
+
+        // Initialize button visibility
+        updateButtons();
+    });
+    </script>
+    
+    <div class="w-full flex justify-between items-center mt-8 px-8 mb-6">
+        <!-- Hero Text -->
+        <p class="text-lg font-semibold text-gray-900">
+            Over <span class="font-bold">110,000+</span> free music tracks shared by our talented community.
+        </p>
+    
+        <!-- Tab Navigation -->
+        <div class="flex space-x-3 text-gray-600 text-sm font-medium bg-gray-100 px-2 py-1 rounded-full">
+            <button class="px-4 py-2 bg-white rounded-full shadow border border-gray-300 text-black font-semibold">
+                Editor's Choice
+            </button>
+            <button class="px-4 py-2 hover:text-black">Latest</button>
+            <button class="px-4 py-2 hover:text-black">Trending</button>
+        </div>
+    </div>
+    <div class="w-full px-4 py-6 bg-gray-50 relative">
+        <div class="max-w-full mx-auto">
+            <!-- Pixabay Radio Section -->
+            <div class="bg-gray-100 p-4 rounded-lg flex items-center justify-between mb-4">
+                <div>
+                    <p class="font-semibold text-lg">🎵 Pixabay Radio 
+                        <span class="bg-gray-300 text-xs px-2 py-1 rounded-full">Royalty-Free</span>
+                    </p>
+                    <p class="text-gray-600 text-sm">Discover the perfect soundtrack for any occasion with Pixabay curated, royalty-free playlists.</p>
+                </div>
+                <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition">
+                    Start Listening
+                </button>
+            </div>
+        </div><section class="music-list">
+            <h2>Music Playlist</h2>
+            <div class="playlist-container" id="playlist-container">
+                <!-- Playlist Items will be inserted dynamically -->
+            </div>
+
+            <audio id="audio-player" controls style="width: 100%; margin-top: 10px;"></audio>
+        </section>
+        
+        <script>
+            const playlists = [
+                { title: "Gardens - Stylish Chill", artist: "penguinmusic", src: "music/gardens-stylish-chill-303261.mp3", duration: "1:56", genre: "Rnb", img: "img/m1.jpg" },
+                { title: "Kugelsicher by TremoxBeatz", artist: "TremoxBeatz", src: "music/kugelsicher-by-tremoxbeatz-302838.mp3", duration: "2:36", genre: "Beats", img: "img/m2.jpg" },
+                { title: "Alone", artist: "BoDeasons", src: "music/alone-296348.mp3", duration: "1:32", genre: "Future bass", img: "img/m3.jpg" },
+                { title: "Vlog Music (Beat Trailer Showreel Pro...", artist: "MFCC", src: "music/amalgam-217007.mp3", duration: "1:01", genre: "Beats", img: "img/m4.jpg" },
+                { title: "Spinning Head", artist: "Gvidon", src: "music/creative-technology-showreel-241274.mp3", duration: "2:08", genre: "Trap", img: "img/m5.jpg" },
+                { title: "Lost in Dreams (abstract chill downte...", artist: "Kulakovka", src: "music/lost-in-dreams-abstract-chill-downtempo-cinematic-future-beats-270241.mp3", duration: "3:15", genre: "Beats", img: "img/m6.jpg" },
+                { title: "Stylish Deep Electronic", artist: "RoyaltyFreeMusic", src: "music/stylish-deep-electronic-262632.mp3", duration: "1:36", genre: "Future bass", img: "img/m7.jpg" },
+                { title: "Chill Night", artist: "LoFi Dreamer", src: "music/in-slow-motion-inspiring-ambient-lounge-219592.mp3", duration: "2:45", genre: "LoFi", img: "img/m8.jpg" },
+                { title: "Epic Trailer Music", artist: "SoundWave", src: "music/lazy-day-stylish-futuristic-chill-239287.mp3", duration: "3:20", genre: "Orchestral", img: "img/m9.jpg" },
+                { title: "Jazz Vibes", artist: "SmoothJazz", src: "music/night-detective-226857.mp3", duration: "2:15", genre: "Jazz", img: "img/m10.jpg" },
+                { title: "House Party", artist: "DJ Beats", src: "music/nightfall-future-bass-music-228100.mp3", duration: "3:00", genre: "House", img: "img/m11.jpg" },
+                { title: "Piano Dreams", artist: "SoftKeys", src: "music/no-place-to-go-216744.mp3", duration: "2:50", genre: "Piano", img: "img/m12.jpg" },
+                { title: "Guitar Sunset", artist: "AcousticSoul", src: "music/soulsweeper-252499.mp3", duration: "3:10", genre: "Acoustic", img: "img/m13.jpg" },
+                { title: "Synthwave Drive", artist: "RetroWave", src: "music/tell-me-the-truth-260010.mp3", duration: "3:45", genre: "Synthwave", img: "img/m14.jpg" }
+            ];
+            
+            const playlistContainer = document.getElementById("playlist-container");
+            playlists.forEach((song) => {
+                const playlistItem = document.createElement("div");
+                playlistItem.classList.add("playlist");
+                playlistItem.setAttribute("data-src", song.src);
+                
+                playlistItem.innerHTML = `
+                    <img src="${song.img}" alt="Artist" class="profile-img">
+                    <div class="music-info">
+                        <span class="song-title">${song.title}</span>
+                        <span class="artist-name">${song.artist}</span>
+                    </div>
+                    <div class="waveform-container">
+                        <svg class="waveform" viewBox="0 0 100 20">
+                            <polyline points="0,10 10,5 20,15 30,10 40,5 50,15 60,10 70,5 80,15 90,10" stroke="gray" stroke-width="1.5" fill="none" />
+                        </svg>
+                    </div>
+                    <span class="song-duration">${song.duration}</span>
+                    <span class="song-genre">${song.genre}</span>
+                    <span class="download-icon">⬇</span>
+                `;
+                
+                playlistContainer.appendChild(playlistItem);
+            });
+        
+            document.querySelectorAll('.playlist').forEach(item => {
+                item.addEventListener('click', function () {
+                    let audio = document.getElementById('audio-player');
+                    let source = this.getAttribute('data-src');
+                    
+                    if (audio.src.includes(source) && !audio.paused) {
+                        audio.pause();
+                    } else {
+                        audio.src = source;
+                        audio.play();
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.querySelectorAll(".waveform-container").forEach((container) => {
+                    // Remove any existing waveforms (prevents duplicates)
+                    container.innerHTML = "";
+        
+                    const waveform = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                    waveform.setAttribute("class", "waveform");
+                    waveform.setAttribute("viewBox", "0 0 200 30"); // Wider & Taller
+        
+                    // A single waveform shape
+                    const polyline = document.createElementNS("http://www.w3.org/2000/svg", "polyline");
+                    polyline.setAttribute("points", "0,15 10,5 20,25 30,10 40,20 50,5 60,25 70,10 80,18 90,8 100,22 110,12 120,25 130,7 140,23 150,11 160,24 170,6 180,19 190,9 200,15");
+                    polyline.setAttribute("stroke", "gray");
+                    polyline.setAttribute("stroke-width", "2.5");
+                    polyline.setAttribute("fill", "none");
+        
+                    waveform.appendChild(polyline);
+                    container.appendChild(waveform);
+                });
+        
+                // Play/Pause Animation on Click
+                document.querySelectorAll(".playlist").forEach((item) => {
+                    item.addEventListener("click", function () {
+                        document.querySelectorAll(".waveform polyline").forEach(polyline => {
+                            polyline.style.animation = "none"; // Stop all animations
+                        });
+        
+                        const currentWave = this.querySelector(".waveform polyline");
+                        if (currentWave.style.animation) {
+                            currentWave.style.animation = "";
+                        } else {
+                            currentWave.style.animation = "waveAnimation 1.5s infinite linear";
+                        }
+                    });
+                });
+            });
+        </script>
+        <audio id="audio-player" controls style="width: 100%; margin-top: 10px;"></audio>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const audioPlayer = document.getElementById("audio-player");
+        
+                document.querySelectorAll(".playlist").forEach((item) => {
+                    item.addEventListener("click", function () {
+                        let source = this.getAttribute("data-src");
+        
+                        if (audioPlayer.src.includes(source) && !audioPlayer.paused) {
+                            audioPlayer.pause();
+                        } else {
+                            audioPlayer.src = source;
+                            audioPlayer.play();
+                        }
+                    });
+                });
+            });
+        </script>
+        
+              
+        <style>
+            .music-list {
+                padding: 20px;
+                width: 100%;
+                margin: auto;
+            }
+            .playlist-container {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+            .playlist {
+                display: grid;
+                grid-template-columns: 40px 2fr 2fr 1fr 1fr 40px;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 5px;
+                border-bottom: 1px solid #ddd;
+                width: 100%;
+            }
+            .profile-img {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+            }
+            .music-info {
+                display: flex;
+                flex-direction: column;
+            }
+            .song-title {
+                font-weight: bold;
+                font-size: 16px;
+            }
+            .artist-name {
+                font-size: 14px;
+                color: gray;
+            }
+            .waveform-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+            }
+            @keyframes waveAnimation {
+                0% { stroke: gray; transform: scaleY(1); }
+                50% { stroke: blue; transform: scaleY(1.3); }
+                100% { stroke: gray; transform: scaleY(1); }
+            }
+
+            .waveform {
+                width: 180px; /* Extended length */
+                height: 30px; /* Taller for better visibility */
+            }
+            .song-duration, .song-genre, .download-icon {
+                text-align: center;
+                font-size: 14px;
+            }
+            .download-icon {
+                cursor: pointer;
+                font-size: 16px;
+            }
+        </style>
+             
+                <!-- Blur Effect with Discover More Button -->
+                <div class="blur-effect">
+                    <div class="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-white/90 via-white/70 to-transparent backdrop-blur-md flex justify-center items-center">
+                        <button class="px-6 py-2 border-2 border-gray-500 text-black font-semibold rounded-full bg-white/70 hover:bg-white/90 transition">
+                            Discover More
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Featured Creators Section -->
+    <div class="mt-10 px-6 relative">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Featured creators</h2>
+            <a href="#" class="text-green-600 hover:underline">See more</a>
+        </div>
+    
+        <div class="relative">
+            <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full px-3 py-2 z-10 hidden">&lt;</button>
+    
+            <div id="scrollContainer" class="flex space-x-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth w-full">
+                
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg1.jpg');">
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/grass1.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Alban Gogh</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg2.jpg');">
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/park.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Samantha Reed</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+    
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg3.jpg');">
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/birdg.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Julian Carter</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+    
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg4.jpg');">
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/beach.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Elena Brooks</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+                
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg5.jpg');">
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/trees.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Marcus Hayes</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+                
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden creator-card">
+                    <div class="w-full h-20 object-cover rounded-md flex justify-center items-center"
+                        style="background-image: url('img/bg6.jpg');">                     
+                        <button class="play-button mr-2">▶</button>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/fantasy.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Olivia Stone</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            </div>
+
+                
+            <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full px-3 py-2 z-10">&gt;</button>
+        </div>
+    </div>
+    <script>
+        const bottomPlayer = document.getElementById('bottom-audio-player'); 
+        const bottomPlayButton = document.getElementById('bottom-play-button'); // Play button in bottom player
+        let currentCard = null; // Track the active card
+        let isPlaying = false; // Track play state
+
+        // Function to play/pause audio
+        function handleCardClick(card) {
+            const audioSrc = card.getAttribute('data-audio');
+            const playButton = card.querySelector('.play-button');
+
+            if (currentCard === card) {
+                // Toggle play/pause if same card is clicked
+                if (isPlaying) {
+                    bottomPlayer.pause();
+                    isPlaying = false;
+                    playButton.textContent = '▶'; // Change to play icon
+                } else {
+                    bottomPlayer.play();
+                    isPlaying = true;
+                    playButton.textContent = '❚❚'; // Change to pause icon
+                }
+            } else {
+                // New card clicked, stop old audio and play new one
+                if (currentCard) {
+                    currentCard.querySelector('.play-button').textContent = '▶'; // Reset previous button
+                }
+
+                currentCard = card;
+                bottomPlayer.src = audioSrc;
+                bottomPlayer.play();
+                isPlaying = true;
+                playButton.textContent = '❚❚'; // Change to pause icon
+
+                // Update bottom player UI
+                document.getElementById("bottom-player-title").textContent = "Now Playing";
+                document.getElementById("bottom-player-creator").textContent = card.querySelector('.text-sm.font-medium').innerText;
+            }
+        }
+
+        // Attach event listeners to creator cards
+        document.querySelectorAll('.creator-card').forEach(card => {
+            card.addEventListener('click', function () {
+                handleCardClick(this);
+            });
+        });
+
+        // Bottom play button should sync with the current playing track
+        bottomPlayButton.addEventListener('click', function () {
+            if (currentCard) {
+                handleCardClick(currentCard);
+            }
+        });
+
+        // Sync button states when audio plays or pauses
+        bottomPlayer.addEventListener('play', function () {
+            isPlaying = true;
+            if (currentCard) {
+                currentCard.querySelector('.play-button').textContent = '❚❚';
+            }
+        });
+
+        bottomPlayer.addEventListener('pause', function () {
+            isPlaying = false;
+            if (currentCard) {
+                currentCard.querySelector('.play-button').textContent = '▶';
+            }
+        });
+    </Script>
+    <script>
+        document.querySelectorAll('.play-button').forEach(button => {
+            button.addEventListener('click', function() {
+                let audioSrc = this.nextElementSibling.getAttribute('data-audio');
+                let audio = new Audio(audioSrc);
+                audio.play();
+            });
+        });
+    </script>
+    <div class="flex items-center space-x-4 p-6 border-t border-gray-200">
+        <!-- Icon -->
+        <div class="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3.172 10.172a4 4 0 015.656-5.656L10 6l1.172-1.172a4 4 0 115.656 5.656L10 16l-6.828-6.828z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        
+        <!-- Content -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900">Free media you can use anywhere</h3>
+            <p class="text-gray-600 mt-1">Pixabay is a vibrant community of creatives, sharing royalty-free images, videos, audio, and other media. All content is released by Pixabay under the Content License, which makes it safe to use without asking for permission or giving credit to the artist - even for certain commercial purposes.</p>
+            <a href="#" class="text-green-600 font-medium mt-2 inline-block hover:underline">Learn more about our license</a>
+        </div>
+    </div>
+    
+    <footer class="bg-white py-10 px-10 text-gray-700 text-sm border-t w-full">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between">
+            <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                <h1 class="text-2xl font-bold text-gray-800">pixabay</h1>
+                <p class="mt-2 max-w-md leading-relaxed">
+                    Over 5.3 million+ high quality stock images, videos and music shared by our talented community.
+                </p>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">Discover</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">Editor's Choice</a></li>
+                    <li><a href="#" class="hover:underline">Curated Collections</a></li>
+                    <li><a href="#" class="hover:underline">Pixabay Radio <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">NEW</span></a></li>
+                    <li><a href="#" class="hover:underline">Popular Images</a></li>
+                    <li><a href="#" class="hover:underline">Popular Videos</a></li>
+                    <li><a href="#" class="hover:underline">Popular Music</a></li>
+                    <li><a href="#" class="hover:underline">Popular Searches</a></li>
+                </ul>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">Community</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">Blog</a></li>
+                    <li><a href="#" class="hover:underline">Forum</a></li>
+                    <li><a href="#" class="hover:underline">Creators</a></li>
+                    <li><a href="#" class="hover:underline">Cameras</a></li>
+                </ul>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">About</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">About Us</a></li>
+                    <li><a href="#" class="hover:underline">FAQ</a></li>
+                    <li><a href="#" class="hover:underline">License Summary</a></li>
+                    <li><a href="#" class="hover:underline">Terms of Service</a></li>
+                    <li><a href="#" class="hover:underline">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:underline">Cookies Policy</a></li>
+                    <li><a href="#" class="hover:underline">Digital Services Act</a></li>
+                    <li><a href="#" class="hover:underline">Report Content</a></li>
+                    <li><a href="#" class="hover:underline">API</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Social Media Icons -->
+        <div class="flex justify-start mt-6 space-x-4">
+            <a href="#" class="text-gray-600"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
+    <footer class="w-full bg-gray-100 py-4 text-center mt-10">
+        <p class="text-gray-500 text-sm">
+            This site is protected by reCAPTCHA and the Google 
+            <a href="#" class="underline">Privacy Policy</a> and 
+            <a href="#" class="underline">Terms of Service</a> apply.
+        </p>
+    </footer>
+   
+    <script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script>
+    
+</body>
+</html>

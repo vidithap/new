@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixabay Clone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Hide scrollbar but keep scrolling functionality */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        .scroll-container:hover .scroll-btn {
+            display: block;
+        }
+        #scrollContainer::-webkit-scrollbar {
+            display: none;
+        }
+        #scrollContainer {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        img {
+            width: 100px; /* Adjust based on card size */
+            height: 150px;
+            object-fit: cover; /* Ensures the image fills the space without distortion */
+        }
+        .profile-img {
+            width: 100px;  /* Adjust as needed */
+            height: 100px;
+            border-radius: 50%; /* Makes it circular */
+            object-fit: cover; /* Ensures proper fit */
+        }
+        .scrollbar-hide {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE & Edge */
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        .nav-link.active {
+            background-color: white;
+            color: black;
+            padding: 10px 16px;
+            border-radius: 20px;
+        }
+                
+    </style>
+</head>
+<body class="bg-gray-100">
+    
+    <!-- Hero Section -->
+    <div class="relative w-full h-[500px] overflow-hidden">
+        <!-- Background Video -->
+        <video class="absolute inset-0 w-full h-full object-cover" autoplay loop muted playsinline>
+            <source src="img/nature.mp4" type="video/mp4">
+        </video>
+    
+        <!-- Dark Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex flex-col justify-center items-center text-white text-center">
+         
+            <!-- Heading at the Top -->
+            <h1 class="text-2xl md:text-4xl font-bold mb-10">Stunning free stock video footages and clips</h1>
+
+
+            <div class="flex flex-wrap justify-center items-center gap-4 w-full max-w-[900px] mx-auto">
+                <a href="home.html" class="nav-link font-semibold whitespace-nowrap">Explore</a>
+
+                <a href="photos.html" class="nav-link font-semibold whitespace-nowrap">Photos</a>
+
+                <a href="illustrations.html" class="nav-link font-semibold whitespace-nowrap">Illustrations</a>
+            
+                <a href="vectors.html" class="nav-link font-semibold whitespace-nowrap">Vectors</a>
+            
+                <a href="videos.html" class="nav-link font-semibold px-4 py-2 rounded-full whitespace-nowrap
+                    text-black bg-white">Videos</a>
+            
+                <a href="music.html" class="nav-link font-semibold whitespace-nowrap">Music</a>
+            
+                <a href="sound-effects.html" class="nav-link font-semibold whitespace-nowrap">Sound Effects</a>
+            
+                <a href="gifs.html" class="nav-link font-semibold whitespace-nowrap ">GIFs</a>
+            </div>
+            
+            
+            <div class="mt-2 relative w-full max-w-2xl">
+                <div class="flex items-center bg-gray-300 px-4 py-3 rounded-full">
+                    <!-- Search Icon -->
+                    <svg class="w-6 h-6 text-gray-600 shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 4a6 6 0 106 6 6 6 0 00-6-6zm8.707 15.293a1 1 0 01-1.414 0l-4.243-4.243a8 8 0 111.414-1.414l4.243 4.243a1 1 0 010 1.414z"/>
+                    </svg>
+                    <input type="text" placeholder="Search..." class="ml-2 w-full bg-transparent focus:outline-none text-gray-800">
+                </div>
+            </div>
+            
+                                   
+            <!-- Categories with Scrollable Navigation -->
+            <div class="relative w-full max-w-2xl mx-auto mt-2 px-4">
+                <div class="flex items-center justify-between">
+                    <button id="scrollLeft" class="scroll-btn left-0 hidden">&#60;</button>
+                    <div id="categoryContainer" class="flex gap-2 overflow-x-auto hide-scrollbar whitespace-nowrap px-2 py-2">
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Business</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Wallpaper</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Cat</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Dog</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Ramadan</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Sky</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Nature</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">International Women's Day</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Holi</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Technology</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Office</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Travel</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Food</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Fashion</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Art</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">People</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Animals</span>
+                        <span class="bg-gray-700 text-white px-3 py-1 rounded-full">Sports</span>
+                    </div>
+                    <button id="scrollRight" class="scroll-btn right-0">&#62;</button>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-2 right-4 text-white text-sm px-4 py-1 rounded">
+            <a href="#" class="underline">Read more about the Content License</a>
+        </div>        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const categoryContainer = document.getElementById("categoryContainer");
+            const scrollLeft = document.getElementById("scrollLeft");
+            const scrollRight = document.getElementById("scrollRight");
+            const discoverBtn = document.getElementById("discoverMore");
+            const nextBtn = document.getElementById("next");
+
+        // Smooth scrolling on wheel event
+        categoryContainer.addEventListener("wheel", function (event) {
+            event.preventDefault();
+            this.scrollBy({ left: event.deltaY < 0 ? -200 : 200, behavior: 'smooth' });
+        });
+
+        scrollLeft.addEventListener("click", function () {
+            categoryContainer.scrollBy({ left: -200, behavior: 'smooth' });
+            scrollRight.classList.remove("hidden");
+            scrollLeft.classList.add("hidden");
+        });
+
+        scrollRight.addEventListener("click", function () {
+            categoryContainer.scrollBy({ left: 200, behavior: 'smooth' });
+            scrollLeft.classList.remove("hidden");
+            scrollRight.classList.add("hidden");
+        });
+
+        // Show discover button after scrolling 500px
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 500) {
+                discoverBtn.classList.remove("opacity-0", "invisible");
+                discoverBtn.classList.add("opacity-100");
+            } else {
+                discoverBtn.classList.remove("opacity-100");
+                discoverBtn.classList.add("opacity-0", "invisible");
+            }
+        });
+
+        // Smooth scroll when clicking Discover More button
+        discoverBtn.addEventListener("click", function () {
+            window.scrollBy({ top: 500, behavior: "smooth" });
+        });
+    });    
+    </script>
+    <div id="navbar-container"></div>
+    <script>
+        // Load Navbar
+        fetch("navbar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("navbar-container").innerHTML = data;
+                loadDropdownScript(); // Initialize dropdowns after navbar loads
+            });
+    
+        // Dropdown menu handling script
+        function loadDropdownScript() {
+            const dropdownButtons = [
+                { button: "exploreBtn", menu: "exploreMenu" },
+                { button: "loginBtn", menu: "loginMenu" },
+                { button: "joinBtn", menu: "joinMenu" },
+                { button: "uploadBtn", menu: "uploadMenu" }
+            ];
+    
+            function disableScroll() {
+                document.body.style.overflow = "hidden";
+            }
+    
+            function enableScroll() {
+                document.body.style.overflow = "auto";
+            }
+    
+            function closeAllMenus() {
+                dropdownButtons.forEach(({ menu }) => {
+                    let dropdown = document.getElementById(menu);
+                    if (dropdown && !dropdown.classList.contains("hidden")) {
+                        dropdown.classList.add("hidden");
+                    }
+                });
+    
+                let anyMenuOpen = dropdownButtons.some(({ menu }) =>
+                    document.getElementById(menu) && !document.getElementById(menu).classList.contains("hidden")
+                );
+                if (!anyMenuOpen) {
+                    enableScroll();
+                }
+            }
+    
+            dropdownButtons.forEach(({ button, menu }) => {
+                const btn = document.getElementById(button);
+                const dropdownMenu = document.getElementById(menu);
+    
+                if (btn && dropdownMenu) {
+                    btn.addEventListener("click", function (event) {
+                        event.stopPropagation();
+                        const isHidden = dropdownMenu.classList.contains("hidden");
+                        closeAllMenus();
+                        if (isHidden) {
+                            dropdownMenu.classList.remove("hidden");
+                            disableScroll();
+                        }
+                    });
+                }
+            });
+    
+            document.addEventListener("click", function (event) {
+                const isClickInsideMenu = dropdownButtons.some(({ menu }) =>
+                    document.getElementById(menu) && document.getElementById(menu).contains(event.target)
+                );
+                if (!isClickInsideMenu) {
+                    closeAllMenus();
+                }
+            });
+        }
+
+    </script>
+    <script>   
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const scrollContainer = document.getElementById("scrollContainer");
+        const prevButton = document.getElementById("prev");
+        const nextButton = document.getElementById("next");
+
+        // Function to scroll right (next button)
+        nextButton.addEventListener("click", function () {
+            scrollContainer.scrollBy({ left: 300, behavior: "smooth" });
+            updateButtons();
+        });
+
+        // Function to scroll left (prev button)
+        prevButton.addEventListener("click", function () {
+            scrollContainer.scrollBy({ left: -300, behavior: "smooth" });
+            updateButtons();
+        });
+
+        // Show/hide buttons based on scroll position
+        function updateButtons() {
+            setTimeout(() => {
+                prevButton.classList.toggle("hidden", scrollContainer.scrollLeft <= 0);
+                nextButton.classList.toggle("hidden", scrollContainer.scrollLeft + scrollContainer.clientWidth >= scrollContainer.scrollWidth);
+            }, 200);
+        }
+
+        // Initialize button visibility
+        updateButtons();
+    });
+    </script>
+    
+    <div class="w-full flex justify-between items-center mt-8 px-8 mb-6">
+        <!-- Hero Text -->
+        <p class="text-lg font-semibold text-gray-900">
+            Over <span class="font-bold">170,000+</span> free stock video footages and clips shared by our talented community.
+        </p>
+    
+        <!-- Tab Navigation -->
+        <div class="flex space-x-3 text-gray-600 text-sm font-medium bg-gray-100 px-2 py-1 rounded-full">
+            <button class="px-4 py-2 bg-white rounded-full shadow border border-gray-300 text-black font-semibold">
+                Editor's Choice
+            </button>
+            <button class="px-4 py-2 hover:text-black">Latest</button>
+            <button class="px-4 py-2 hover:text-black">Trending</button>
+        </div>
+    </div>
+    <!-- Image Gallery Section -->
+    <div class="max-w-screen mx-auto px-3 relative">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 w-full">
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/sea.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/mountains.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/path.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/sunflower.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/snow.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/turtle.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/clouds.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/field.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/woman.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/court.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/waves.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+            <div class="relative group overflow-hidden rounded-lg">
+                <video src="img/basketball.mp4" loop muted class="video w-full h-auto object-cover transition-transform group-hover:scale-105"></video>
+            </div>
+        </div>
+
+    
+        <script>
+            document.querySelectorAll('.video').forEach(video => {
+                video.addEventListener('mouseenter', () => video.play());
+                video.addEventListener('mouseleave', () => video.pause());
+            });
+        </script>
+
+    
+        <!-- Blur Effect -->
+        <div class="absolute bottom-[-20px] left-0 w-full h-28 bg-gradient-to-t from-white/90 via-white/70 to-transparent backdrop-blur-md flex justify-center items-center">
+            <button class="px-6 py-2 border-2 border-gray-500 text-black font-semibold rounded-full bg-white/70 hover:bg-white/90 transition">
+                Discover More
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Featured Creators Section -->
+    <div class="mt-10 px-6 relative">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-lg font-semibold">Featured creators</h2>
+            <a href="#" class="text-green-600 hover:underline">See more</a>
+        </div>
+    
+        <!-- ✅ The whole container is now relative -->
+        <div class="relative">
+            <!-- ✅ Left Scroll Button (inside relative container) -->
+            <button id="prev" class="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full px-3 py-2 z-10 hidden">
+                &lt;
+            </button>
+    
+            <!-- Scrollable Cards -->
+            <div id="scrollContainer" class="flex space-x-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth w-full">
+                <!-- Card 1 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/bird.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/AvaHart.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">AvaHart</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            
+                <!-- Card 2 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/flowers.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/EliotMason.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">EliotMason</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            
+                <!-- Card 3 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/falls.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/Ila700.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">Ila700</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            
+                <!-- Card 4 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/fruit.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/SaudBhatti.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">SaudBhatti</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            
+                <!-- Card 5 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/fuji.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/adege.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">adege</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            
+                <!-- Card 6 -->
+                <div class="min-w-[320px] bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="relative">
+                        <video class="video w-full h-32 object-cover rounded-md" loop muted playsinline>
+                            <source src="img/sunset.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="p-3 flex items-center">
+                        <img src="img/flutie8211.jpg" class="w-10 h-10 rounded-full mr-2">
+                        <span class="text-sm font-medium">flutie8211</span>
+                        <a href="#" class="ml-auto text-green-600 text-sm font-semibold">Follow</a>
+                    </div>
+                </div>
+            </div>
+            <script>
+                document.querySelectorAll('.video').forEach(video => {
+                    video.addEventListener('mouseenter', () => video.play());
+                    video.addEventListener('mouseleave', () => video.pause());
+                });
+            </script>
+            <!-- ✅ Right Scroll Button (inside relative container) -->
+            <button id="next" class="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white shadow-md rounded-full px-3 py-2 z-10">
+                &gt;
+            </button>
+        </div>
+    </div>
+
+    <div class="flex items-center space-x-4 p-6 border-t border-gray-200">
+        <!-- Icon -->
+        <div class="flex items-center justify-center w-12 h-12 bg-green-100 rounded-full">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M3.172 10.172a4 4 0 015.656-5.656L10 6l1.172-1.172a4 4 0 115.656 5.656L10 16l-6.828-6.828z" clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        
+        <!-- Content -->
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900">Free media you can use anywhere</h3>
+            <p class="text-gray-600 mt-1">Pixabay is a vibrant community of creatives, sharing royalty-free images, videos, audio, and other media. All content is released by Pixabay under the Content License, which makes it safe to use without asking for permission or giving credit to the artist - even for certain commercial purposes.</p>
+            <a href="#" class="text-green-600 font-medium mt-2 inline-block hover:underline">Learn more about our license</a>
+        </div>
+    </div>
+    
+    <footer class="bg-white py-10 px-10 text-gray-700 text-sm border-t w-full">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between">
+            <div class="w-full md:w-1/3 mb-6 md:mb-0">
+                <h1 class="text-2xl font-bold text-gray-800">pixabay</h1>
+                <p class="mt-2 max-w-md leading-relaxed">
+                    Over 5.3 million+ high quality stock images, videos and music shared by our talented community.
+                </p>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">Discover</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">Editor's Choice</a></li>
+                    <li><a href="#" class="hover:underline">Curated Collections</a></li>
+                    <li><a href="#" class="hover:underline">Pixabay Radio <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">NEW</span></a></li>
+                    <li><a href="#" class="hover:underline">Popular Images</a></li>
+                    <li><a href="#" class="hover:underline">Popular Videos</a></li>
+                    <li><a href="#" class="hover:underline">Popular Music</a></li>
+                    <li><a href="#" class="hover:underline">Popular Searches</a></li>
+                </ul>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">Community</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">Blog</a></li>
+                    <li><a href="#" class="hover:underline">Forum</a></li>
+                    <li><a href="#" class="hover:underline">Creators</a></li>
+                    <li><a href="#" class="hover:underline">Cameras</a></li>
+                </ul>
+            </div>
+            <div class="w-1/3 md:w-1/6">
+                <h2 class="font-bold mb-3">About</h2>
+                <ul class="space-y-2">
+                    <li><a href="#" class="hover:underline">About Us</a></li>
+                    <li><a href="#" class="hover:underline">FAQ</a></li>
+                    <li><a href="#" class="hover:underline">License Summary</a></li>
+                    <li><a href="#" class="hover:underline">Terms of Service</a></li>
+                    <li><a href="#" class="hover:underline">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:underline">Cookies Policy</a></li>
+                    <li><a href="#" class="hover:underline">Digital Services Act</a></li>
+                    <li><a href="#" class="hover:underline">Report Content</a></li>
+                    <li><a href="#" class="hover:underline">API</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Social Media Icons -->
+        <div class="flex justify-start mt-6 space-x-4">
+            <a href="#" class="text-gray-600"><i class="fab fa-instagram"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-pinterest"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-600"><i class="fab fa-facebook"></i></a>
+        </div>
+    </footer>
+    <footer class="w-full bg-gray-100 py-4 text-center mt-10">
+        <p class="text-gray-500 text-sm">
+            This site is protected by reCAPTCHA and the Google 
+            <a href="#" class="underline">Privacy Policy</a> and 
+            <a href="#" class="underline">Terms of Service</a> apply.
+        </p>
+    </footer>
+   
+    <script src="https://kit.fontawesome.com/YOUR-FONT-AWESOME-KIT.js" crossorigin="anonymous"></script>
+    
+</body>
+</html>
